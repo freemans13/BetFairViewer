@@ -21,10 +21,10 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': {
+      '/betfair': {
         target: 'http://10.168.1.1:5010',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        // rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

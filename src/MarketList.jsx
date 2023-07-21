@@ -5,7 +5,7 @@ export default function MarketList({ setMarket }) {
 
   React.useEffect(() => {
     async function fetchMarketCatalogue() {
-      const result = await fetch('api/betfair/MarketCatalogue');
+      const result = await fetch('betfair/MarketCatalogue');
       const json = await result.json();
       setMarkets(json);
     }
