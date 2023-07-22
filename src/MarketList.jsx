@@ -79,7 +79,6 @@ export default function MarketList({ setMarket }) {
   return (
     <>
       <div>
-        Total green-up value:{' '}
         <b style={redOrGreen(totalGreenUpValue)}>£{totalGreenUpValue.toFixed(2)}</b> over{' '}
         {filteredMarkets && filteredMarkets.length} markets
       </div>
