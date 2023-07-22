@@ -25,7 +25,6 @@ export default function RunnerList({ market }) {
     detail = model.age;
   }
   let order = book?.orders[book.orders.length - 1];
-  console.dir(book, { depth: 5 });
 
   return (
     <>

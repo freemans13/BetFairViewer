@@ -15,6 +15,9 @@ export default function MarketList({ setMarket }) {
   }
 
   function getMatchedCount(market) {
+    if (!market.payout) {
+      return 0;
+    }
     const matchedCount = market.payout.payouts.reduce((acc, payout) => {
       if (!payout.matched) {
         return acc;
@@ -25,6 +28,9 @@ export default function MarketList({ setMarket }) {
   }
 
   function getUnmatchedCount(market) {
+    if (!market.payout) {
+      return 0;
+    }
     const unmatchedCount = market.payout.payouts.reduce((acc, payout) => {
       if (payout.void) {
         return acc;
@@ -38,6 +44,9 @@ export default function MarketList({ setMarket }) {
   }
 
   function getGreenUpValue(market) {
+    if (!market.greenUp) {
+      return 0;
+    }
     const greenUpValue = market.greenUp.payouts.reduce((acc, payout) => {
       if (payout.void) {
         return acc;
@@ -53,6 +62,7 @@ export default function MarketList({ setMarket }) {
     return greenUpValue;
   }
 
+  let totalGreenUpValue = 0;
   return (
     <>
       {markets &&
@@ -63,6 +73,7 @@ export default function MarketList({ setMarket }) {
           const greenUpValue = getGreenUpValue(market);
           const matched = getMatchedCount(market);
           const total = getUnmatchedCount(market) + matched;
+          totalGreenUpValue += greenUpValue;
           return (
             <button
               key={market.marketId}
@@ -83,5 +94,11 @@ export default function MarketList({ setMarket }) {
 }
 
 function redOrGreen(value) {
-  return { color: `${value >= 0 ? 'lightgreen' : 'red'}` };
+  if (value === 0) {
+    return { color: 'grey' };
+  }
+  if (value > 0) {
+    return { color: 'lightgreen' };
+  }
+  return { color: 'red' };
 }

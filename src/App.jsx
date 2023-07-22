@@ -13,12 +13,16 @@ function App() {
   const [market, setMarket] = useState(null);
   return (
     <S.Div>
-      <S.Nav>
-        <MarketList setMarket={setMarket} />
-      </S.Nav>
-      <S.Main>
-        <RunnerList market={market} />
-      </S.Main>
+      {!market && (
+        <S.Nav>
+          <MarketList setMarket={setMarket} />
+        </S.Nav>
+      )}
+      {market && (
+        <S.Main>
+          <RunnerList market={market} />
+        </S.Main>
+      )}
     </S.Div>
   );
 }
