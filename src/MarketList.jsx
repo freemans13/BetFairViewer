@@ -63,17 +63,29 @@ export default function MarketList({ setMarket }) {
   }
 
   let totalGreenUpValue = 0;
+  const m =
+    markets &&
+    markets.map((market) => {
+      const startTime = new Date(market.marketStartTime);
+      const old = startTime < new Date();
+      const style = old ? { color: 'gray' } : {};
+      const greenUpValue = getGreenUpValue(market);
+      const matched = getMatchedCount(market);
+      const total = getUnmatchedCount(market) + matched;
+      totalGreenUpValue += greenUpValue;
+      return { market, greenUpValue, matched, total };
+    });
   return (
     <>
-      {markets &&
-        markets.map((market) => {
+      <div>
+        Total green-up value:{' '}
+        <b style={redOrGreen(totalGreenUpValue)}>£{totalGreenUpValue.toFixed(2)}</b>
+      </div>
+      {m &&
+        m.map(({ market, greenUpValue, matched, total }) => {
           const startTime = new Date(market.marketStartTime);
           const old = startTime < new Date();
           const style = old ? { color: 'gray' } : {};
-          const greenUpValue = getGreenUpValue(market);
-          const matched = getMatchedCount(market);
-          const total = getUnmatchedCount(market) + matched;
-          totalGreenUpValue += greenUpValue;
           return (
             <button
               key={market.marketId}
