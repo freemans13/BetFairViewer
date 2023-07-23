@@ -54,7 +54,7 @@ export default function MarketList() {
               {market.event.venue} {getRaceLocalTime(market.marketStartTime)}
               <br />
               {matched}/{total}{' '}
-              <span style={redOrGreen(greenUpValue)}>£{greenUpValue.toFixed(2)}</span>
+              <span style={redOrGreen(greenUpValue)}>£{greenUpValue?.toFixed(2)}</span>
             </S.Link>
           );
         })}
