@@ -20,54 +20,6 @@ export default function MarketList() {
     return londonTime;
   }
 
-  function getMatchedCount(market) {
-    if (!market.payout) {
-      return 0;
-    }
-    const matchedCount = market.payout.payouts.reduce((acc, payout) => {
-      if (!payout.matched) {
-        return acc;
-      }
-      return acc + 1;
-    }, 0);
-    return matchedCount;
-  }
-
-  function getUnmatchedCount(market) {
-    if (!market.payout) {
-      return 0;
-    }
-    const unmatchedCount = market.payout.payouts.reduce((acc, payout) => {
-      if (payout.void) {
-        return acc;
-      }
-      if (payout.matched) {
-        return acc;
-      }
-      return acc + 1;
-    }, 0);
-    return unmatchedCount;
-  }
-
-  function getGreenUpValue(market) {
-    if (!market.greenUp) {
-      return 0;
-    }
-    const greenUpValue = market.greenUp.payouts.reduce((acc, payout) => {
-      if (payout.void) {
-        return acc;
-      }
-      if (!payout.profit) {
-        return acc;
-      }
-      return Math.min(acc, payout.profit);
-    }, Number.MAX_VALUE);
-    if (greenUpValue === Number.MAX_VALUE) {
-      return 0;
-    }
-    return greenUpValue;
-  }
-
   let totalGreenUpValue = 0;
   const m =
     markets &&
@@ -75,9 +27,9 @@ export default function MarketList() {
       const startTime = new Date(market.marketStartTime);
       const old = startTime < new Date();
       const style = old ? { color: 'gray' } : {};
-      const greenUpValue = getGreenUpValue(market);
-      const matched = getMatchedCount(market);
-      const total = getUnmatchedCount(market) + matched;
+      const greenUpValue = market.greenUp.profit;
+      const matched = market.greenUp.matchedSelectionCount;
+      const total = market.greenUp.selectionCount;
       totalGreenUpValue += greenUpValue;
       return { market, greenUpValue, matched, total };
     });
@@ -85,7 +37,7 @@ export default function MarketList() {
   return (
     <S.Div>
       <div>
-        <b style={redOrGreen(totalGreenUpValue)}>£{totalGreenUpValue.toFixed(2)}</b> over{' '}
+        <b style={redOrGreen(totalGreenUpValue)}>£{totalGreenUpValue?.toFixed(2)}</b> over{' '}
         {filteredMarkets && filteredMarkets.length} markets
       </div>
       {filteredMarkets &&
