@@ -1,12 +1,18 @@
-import { useOverview } from './api';
+import { Link, useLoaderData } from 'react-router-dom';
 import React from 'react';
+import { styled } from '@linaria/react';
 
-export default function MarketList({ setMarket }) {
-  const { data: markets, isLoading, error } = useOverview();
+const S = {}; // styled components
+
+export default function MarketList() {
+  // @ts-ignore
+  const { markets } = useLoaderData();
 
   const options = {
     timeZone: 'Europe/London',
     hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
   };
 
   function getRaceLocalTime(date) {
@@ -77,7 +83,7 @@ export default function MarketList({ setMarket }) {
     });
   const filteredMarkets = m && m.filter((market) => market.total !== 0);
   return (
-    <>
+    <S.Div>
       <div>
         <b style={redOrGreen(totalGreenUpValue)}>£{totalGreenUpValue.toFixed(2)}</b> over{' '}
         {filteredMarkets && filteredMarkets.length} markets
@@ -88,27 +94,46 @@ export default function MarketList({ setMarket }) {
           const old = startTime < new Date();
           const style = old ? { color: 'gray' } : {};
           return (
-            <button
+            <S.Link
+              to={`/markets/${market.marketId.split('.')[1]}`}
               key={market.marketId}
-              type="button"
-              onClick={() => setMarket(market)}
               style={style}
             >
-              {market.event.name} {getRaceLocalTime(market.marketStartTime)}{' '}
-              <p>
-                {market.marketId} {matched}/{total}
-              </p>
-              <p style={redOrGreen(greenUpValue)}>£{greenUpValue.toFixed(2)}</p>
-            </button>
+              {market.event.venue} {getRaceLocalTime(market.marketStartTime)}
+              <br />
+              {matched}/{total}{' '}
+              <span style={redOrGreen(greenUpValue)}>£{greenUpValue.toFixed(2)}</span>
+            </S.Link>
           );
         })}
-    </>
+    </S.Div>
   );
 }
+S.Div = styled.div`
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+`;
+
+S.Link = styled(Link)`
+  /* width: 8rem; */
+  /* word-break: keep-all; */
+  /* word-wrap: break-word; */
+  /* white-space: nowrap; */
+  white-space: normal;
+  display: inline-block;
+  /* padding: 0.5rem; */
+  margin: 0.5rem;
+  text-decoration: none;
+  /* border: 1px solid darkslategray; */
+  /* &:hover {
+    background-color: darkslategray;
+  } */
+`;
 
 function redOrGreen(value) {
   if (value === 0) {
-    return { color: 'grey' };
+    return {};
   }
   if (value > 0) {
     return { color: 'lightgreen' };

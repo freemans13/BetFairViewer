@@ -2,18 +2,27 @@ import React from 'react';
 import { useMarketProjection, useBook } from './api';
 import Model from './Model';
 import { styled } from '@linaria/react';
+import { useLoaderData } from 'react-router-dom';
 
 const S = {}; // styled components
 
-export default function RunnerList({ market }) {
+export default function RunnerList() {
+  // @ts-ignore
+  const { market } = useLoaderData();
   if (!market) {
     return <h1>no market selected</h1>;
   }
 
   const { data: projection, isLoading, error } = useMarketProjection(market.marketId);
   const { data: book, isLoadingBook, errorBook } = useBook(market.marketId);
-  if (isLoading) {
+  if (isLoading || isLoadingBook) {
     return <div>loading...</div>;
+  }
+  if (!projection) {
+    return <div>market not found</div>;
+  }
+  if (!book) {
+    return <div>book not found</div>;
   }
   const model = new Model(market, projection);
   let detail;
@@ -27,16 +36,16 @@ export default function RunnerList({ market }) {
   let order = book?.orders[book.orders.length - 1];
 
   return (
-    <>
+    <S.Div>
       <h1>
         {projection.marketDefinition.venue} {projection.marketDefinition.status} {detail}
       </h1>
       <S.UlRunner>
-        <S.Li>
+        <S.Li style={{ color: 'gray' }}>
           <div className="runner">
             <div>Selection</div>
+            <div>ID</div>
             <div>Profit</div>
-            <div>selectionId</div>
           </div>
           <div className="back">
             <div>Price</div>
@@ -92,26 +101,40 @@ export default function RunnerList({ market }) {
           );
         })}
       </S.UlRunner>
-    </>
+    </S.Div>
   );
 }
 
+S.Div = styled.div`
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+`;
+
 S.UlRunner = styled.ul`
   list-style-type: none;
+  margin: 0;
+  padding: 0;
 `;
 
 S.Li = styled.li`
-  border: 1px solid darkgrey;
+  border-bottom: 1px solid darkslategray;
   display: flex;
+
+  div {
+    padding: 2px;
+  }
 
   .runner {
     flex: 3;
+    text-align: left;
   }
 
   .back {
     flex: 1;
     display: flex;
     flex-direction: column;
+    text-align: right;
   }
 
   .order {
