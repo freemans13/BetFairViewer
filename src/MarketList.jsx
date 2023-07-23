@@ -1,12 +1,12 @@
 import { Link, useLoaderData } from 'react-router-dom';
 import React from 'react';
 import { styled } from '@linaria/react';
+import { useOverview } from './api.js';
 
 const S = {}; // styled components
 
 export default function MarketList() {
-  // @ts-ignore
-  const { markets } = useLoaderData();
+  const { data: markets } = useOverview();
 
   const options = {
     timeZone: 'Europe/London',
