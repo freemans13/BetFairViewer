@@ -25,7 +25,7 @@ const GlobalStyles = styled.div`
     html,
     body,
     #root {
-      height: 100%;
+      /* height: 100%; */
     }
 
     /*

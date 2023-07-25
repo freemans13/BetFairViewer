@@ -106,8 +106,6 @@ export default function RunnerList() {
 }
 
 S.Div = styled.div`
-  height: 100%;
-  overflow-y: auto;
   overflow-x: hidden;
 `;
 

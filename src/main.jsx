@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import GlobalStyles from './GlobalStyles';
 import './index.css';
-import App from './App.jsx';
-import MarketList from './MarketList.jsx';
 import RunnerList from './RunnerList.jsx';
+import Overview from './Overview.jsx';
 
 async function OverviewLoader() {
   const markets = await fetch('/betfair/Overview').then((r) => r.json());
@@ -27,7 +26,7 @@ async function MarketLoader({ params }) {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MarketList />,
+    element: <Overview />,
     loader: OverviewLoader,
   },
   {

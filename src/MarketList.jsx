@@ -1,12 +1,13 @@
 import { Link, useLoaderData } from 'react-router-dom';
 import React from 'react';
 import { styled } from '@linaria/react';
-import { useOverview } from './api.js';
 
 const S = {}; // styled components
 
-export default function MarketList() {
-  const { data: markets } = useOverview();
+export default function MarketList({ markets, title }) {
+  if (!markets || markets.length === 0) {
+    return null;
+  }
 
   const options = {
     timeZone: 'Europe/London',
@@ -16,6 +17,7 @@ export default function MarketList() {
   };
 
   function getRaceLocalTime(date) {
+    // @ts-ignore
     const londonTime = new Date(date).toLocaleTimeString('en-US', options);
     return londonTime;
   }
@@ -24,9 +26,6 @@ export default function MarketList() {
   const m =
     markets &&
     markets.map((market) => {
-      const startTime = new Date(market.marketStartTime);
-      const old = startTime < new Date();
-      const style = old ? { color: 'gray' } : {};
       const greenUpValue = market.greenUp.profit;
       const matched = market.greenUp.matchedSelectionCount;
       const total = market.greenUp.selectionCount;
@@ -37,8 +36,8 @@ export default function MarketList() {
   return (
     <S.Div>
       <div>
-        <b style={redOrGreen(totalGreenUpValue)}>£{totalGreenUpValue?.toFixed(2)}</b> over{' '}
-        {filteredMarkets && filteredMarkets.length} markets
+        {title}, {filteredMarkets && filteredMarkets.length} markets,{' '}
+        <b style={redOrGreen(totalGreenUpValue)}>£{totalGreenUpValue?.toFixed(2)}</b>
       </div>
       {filteredMarkets &&
         filteredMarkets.map(({ market, greenUpValue, matched, total }) => {
@@ -62,8 +61,6 @@ export default function MarketList() {
   );
 }
 S.Div = styled.div`
-  height: 100%;
-  overflow-y: auto;
   overflow-x: hidden;
 `;
 

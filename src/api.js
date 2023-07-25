@@ -11,6 +11,13 @@ function useOverview() {
   return response;
 }
 
+function useProfitLoss() {
+  const response = useSWR('/betfair/ProfitLoss', fetcher, {
+    refreshInterval: 15_000, // Poll every few seconds
+  });
+  return response;
+}
+
 function useMarketCatalogue() {
   const response = useSWR('/betfair/MarketCatalogue', fetcher, {
     refreshInterval: 60_000, // Poll every 60 seconds
@@ -32,4 +39,4 @@ function useBook(marketId) {
   return { data, isLoading, error };
 }
 
-export { useOverview, useMarketCatalogue, useMarketProjection, useBook };
+export { useOverview, useProfitLoss, useMarketCatalogue, useMarketProjection, useBook };
