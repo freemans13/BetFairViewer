@@ -5,6 +5,7 @@ import GlobalStyles from './GlobalStyles';
 import './index.css';
 import RunnerList from './RunnerList.jsx';
 import Overview from './OvervIew.jsx';
+import ProfitLoss from './ProfitLoss.jsx';
 
 async function OverviewLoader() {
   const markets = await fetch('/betfair/Overview').then((r) => r.json());
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
     path: '/',
     element: <Overview />,
     loader: OverviewLoader,
+  },
+  {
+    path: '/profit',
+    element: <ProfitLoss />,
   },
   {
     path: '/markets/:marketId',

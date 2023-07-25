@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useOverview, useProfitLoss } from './api.js';
 import MarketList from './MarketList.jsx';
+import { Link } from 'react-router-dom';
 
 export default function Overview() {
   const { data: overview } = useOverview();
@@ -11,7 +12,7 @@ export default function Overview() {
 
   return (
     <>
-      <h1>£{profitLoss?.today.clearedOrders[0].profit ?? '??'}</h1>
+      <Link to="/profit">£{profitLoss?.today.clearedOrders[0].profit ?? '??'}</Link>
       <MarketList markets={overview.past} title="Past" />
       <MarketList markets={overview.today} title="Today" />
       <MarketList markets={overview.tomorrow} title="Tomorrow" />
