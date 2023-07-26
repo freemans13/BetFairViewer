@@ -57,7 +57,7 @@ export default function RunnerList() {
             <div>Volume</div>
           </div>
           <div className="order-heading">
-            <div className="col">Un-matched</div>
+            <div className="col">Unmatched</div>
             <div className="col">Matched</div>
           </div>
         </S.Li>
@@ -123,6 +123,7 @@ S.UlRunner = styled.ul`
 S.Li = styled.li`
   border-bottom: 1px solid darkslategray;
   display: flex;
+  gap: 1rem;
 
   .runner {
     flex: 3;
