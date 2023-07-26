@@ -12,7 +12,9 @@ export default function Overview() {
 
   return (
     <>
-      <Link to="/profit">£{profitLoss?.today.clearedOrders[0].profit ?? '??'}</Link>
+      <Link to="/profit">
+        £{profitLoss?.today?.clearedOrders?.[0]?.profit?.toFixed(2) ?? '0.00'}
+      </Link>
       <MarketList markets={overview.past} title="Past" />
       <MarketList markets={overview.today} title="Today" />
       <MarketList markets={overview.tomorrow} title="Tomorrow" />
