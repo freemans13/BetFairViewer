@@ -1,25 +1,13 @@
 import { Link, useLoaderData } from 'react-router-dom';
 import React from 'react';
 import { styled } from '@linaria/react';
+import { getRaceLocalTime } from './date-utils.js';
 
 const S = {}; // styled components
 
 export default function MarketList({ markets, title }) {
   if (!markets || markets.length === 0) {
     return null;
-  }
-
-  const options = {
-    timeZone: 'Europe/London',
-    hour12: false,
-    hour: '2-digit',
-    minute: '2-digit',
-  };
-
-  function getRaceLocalTime(date) {
-    // @ts-ignore
-    const londonTime = new Date(date).toLocaleTimeString('en-US', options);
-    return londonTime;
   }
 
   let totalGreenUpValue = 0;

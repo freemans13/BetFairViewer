@@ -3,6 +3,7 @@ import { useMarketProjection, useBook } from './api';
 import Model from './Model';
 import { styled } from '@linaria/react';
 import { useLoaderData } from 'react-router-dom';
+import { getRaceLocalTime } from './date-utils.js';
 
 const S = {}; // styled components
 
@@ -38,8 +39,11 @@ export default function RunnerList() {
   return (
     <S.Div>
       <h1>
-        {projection.marketDefinition.venue} {projection.marketDefinition.status} {detail}
+        {projection.marketDefinition.venue} {getRaceLocalTime(market.marketStartTime)}
       </h1>
+      <div>
+        {projection.marketDefinition.status} {detail}
+      </div>
       <S.UlRunner>
         <S.Li style={{ color: 'gray' }}>
           <div className="runner">
@@ -53,7 +57,7 @@ export default function RunnerList() {
             <div>Volume</div>
           </div>
           <div className="order-heading">
-            <div className="col">Unmatched</div>
+            <div className="col">Un-matched</div>
             <div className="col">Matched</div>
           </div>
         </S.Li>
@@ -107,6 +111,7 @@ export default function RunnerList() {
 
 S.Div = styled.div`
   overflow-x: hidden;
+  padding: 0 1rem;
 `;
 
 S.UlRunner = styled.ul`
