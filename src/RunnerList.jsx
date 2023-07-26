@@ -119,10 +119,6 @@ S.Li = styled.li`
   border-bottom: 1px solid darkslategray;
   display: flex;
 
-  div {
-    padding: 2px;
-  }
-
   .runner {
     flex: 3;
     text-align: left;
