@@ -95,7 +95,7 @@ export default function RunnerList() {
                 <div>{current.total}</div>
               </div>
               {orderSelection?.status === 'E' ||
-              (order?.options.orderType === 'MARKET_ON_CLOSE' && orderSelection?.matched) ? (
+              (order?.options.orderType === 'MARKET_ON_CLOSE' && !orderSelection?.matched) ? (
                 <OrderSelection selection={orderSelection} />
               ) : (
                 <div className="numbers" />
@@ -160,10 +160,10 @@ function OrderSelection({ selection, runner = null }) {
     /* unmatched model needed */
 
     let price;
-    if (selection?.price) {
-      price = round(selection?.price);
-    } else {
+    if (selection?.size) {
       price = 'BSP';
+    } else {
+      price = round(selection?.price);
     }
     model = {
       size: round(selection?.size - selection?.matched),
