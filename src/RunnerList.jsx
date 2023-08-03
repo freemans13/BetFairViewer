@@ -159,8 +159,8 @@ function OrderSelection({ selection, runner = null }) {
     /* unmatched model needed */
 
     let price;
-    if (selection.price) {
-      price = round(selection.price);
+    if (selection?.price) {
+      price = round(selection?.price);
     } else {
       price = 'BSP';
     }
