@@ -2,7 +2,7 @@ export default class makeModel {
   constructor(market, projection) {
     const starTime = new Date(market.marketStartTime).getTime();
     const publishTime = projection.publishTime;
-    const age = timeFormatted(starTime - publishTime);
+    const age = formatDuration(starTime - publishTime);
 
     this.id = projection.id;
     this.age = age;
@@ -29,15 +29,6 @@ export default class makeModel {
     }, 0);
     return this;
   }
-}
-
-function timeFormatted(milliseconds) {
-  if (!milliseconds) {
-    return '0m0s';
-  }
-  const minutes = Math.floor(milliseconds / 60000);
-  const seconds = Math.ceil((milliseconds % 60000) / 1000);
-  return `${minutes}m${seconds}s`;
 }
 
 function getRunnerPriceInfo(rc, selectionId) {
@@ -99,4 +90,30 @@ function getInfo(batb, index, index2) {
   } else {
     return null;
   }
+}
+
+export function formatDuration(elapsedTimeMs) {
+  const seconds = Math.floor(elapsedTimeMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  const formattedTime = [];
+  if (days > 0) {
+    formattedTime.push(`${days}d`);
+  }
+  if (hours % 24 > 0) {
+    formattedTime.push(`${hours % 24}h`);
+  }
+  if (minutes % 60 > 0) {
+    formattedTime.push(`${minutes % 60}m`);
+  }
+  if (seconds % 60 > 0) {
+    formattedTime.push(`${seconds % 60}s`);
+  }
+  if (elapsedTimeMs > 0 && formattedTime.length === 0) {
+    formattedTime.push(`${elapsedTimeMs % 1000}ms`);
+  }
+
+  return formattedTime.join('');
 }

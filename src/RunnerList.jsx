@@ -94,10 +94,8 @@ export default function RunnerList() {
                 <div>{current.size} </div>
                 <div>{current.total}</div>
               </div>
-              {orderSelection ? (
-                <OrderSelection
-                  selection={orderSelection?.status === 'E' ? orderSelection : null}
-                />
+              {orderSelection?.status === 'E' || order?.options.orderType === 'MARKET_ON_CLOSE' ? (
+                <OrderSelection selection={orderSelection} />
               ) : (
                 <div className="numbers" />
               )}
@@ -160,9 +158,15 @@ function OrderSelection({ selection, runner = null }) {
   } else {
     /* unmatched model needed */
 
+    let price;
+    if (selection.price) {
+      price = round(selection.price);
+    } else {
+      price = 'BSP';
+    }
     model = {
       size: round(selection?.size - selection?.matched),
-      price: selection?.price,
+      price,
       total: round((selection?.size - selection?.matched) * selection?.price),
     };
   }
@@ -197,7 +201,7 @@ S.Col = styled.div`
 `;
 
 function round(value) {
-  return value.toFixed(2).toLocaleString('en-US', {
+  return value?.toFixed(2).toLocaleString('en-US', {
     style: 'decimal',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
