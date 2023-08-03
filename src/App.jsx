@@ -28,15 +28,12 @@ function App() {
 }
 
 S.Div = styled.div`
-  display: flex;
   height: 100%;
 `;
 S.Nav = styled.nav`
-  flex: 1;
   overflow-y: auto;
 `;
 S.Main = styled.main`
-  flex: 3;
   overflow-y: auto;
 `;
 

@@ -42,7 +42,7 @@ export default function RunnerList() {
         {projection.marketDefinition.venue} {getRaceLocalTime(market.marketStartTime)}
       </h1>
       <div>
-        {projection.marketDefinition.status} {detail}
+        {projection.id} {projection.marketDefinition.status} {detail}
       </div>
       <S.UlRunner>
         <S.Li style={{ color: 'gray' }}>
@@ -51,13 +51,15 @@ export default function RunnerList() {
             <div>ID</div>
             <div>Profit</div>
           </div>
-          <div className="back">
+          <div className="numbers">
             <div>Price</div>
             <div>(Size)</div>
             <div>Volume</div>
           </div>
-          <div className="order-heading">
+          <div className="numbers">
             <div className="col">Unmatched</div>
+          </div>
+          <div className="numbers">
             <div className="col">Matched</div>
           </div>
         </S.Li>
@@ -66,9 +68,9 @@ export default function RunnerList() {
           const payoutSelection = book?.payouts.payouts.find((r) => r.id === runner.id);
           const orderSelection = order?.selections.find((r) => r.selectionId === runner.id);
           const current = {
-            price: runner.back[0].price,
-            size: runner.back[0].size,
-            total: runner.back[0].tradedVolume,
+            price: runner.back?.[0].price,
+            size: runner.back?.[0].size,
+            total: runner.back?.[0].tradedVolume,
           };
           if (runner.status !== 'ACTIVE') {
             current.price = null;
@@ -87,19 +89,22 @@ export default function RunnerList() {
                   {runner.status === 'ACTIVE' ? payoutSelection?.profit : null}
                 </div>
               </div>
-              <div className="back">
+              <div className="numbers">
                 <div>{current.price}</div>
                 <div>{current.size} </div>
                 <div>{current.total}</div>
               </div>
-              {orderSelection || payoutSelection ? (
+              {orderSelection ? (
                 <OrderSelection
-                  orderSelection={orderSelection?.status === 'E' ? orderSelection : null}
-                  payoutSelection={payoutSelection}
-                  runner={runner}
+                  selection={orderSelection?.status === 'E' ? orderSelection : null}
                 />
               ) : (
-                <div className="order" />
+                <div className="numbers" />
+              )}
+              {payoutSelection ? (
+                <OrderSelection selection={payoutSelection} runner={runner} />
+              ) : (
+                <div className="numbers" />
               )}
             </S.Li>
           );
@@ -110,7 +115,8 @@ export default function RunnerList() {
 }
 
 S.Div = styled.div`
-  overflow-x: hidden;
+  max-width: 35rem;
+  overflow-x: auto; /* Enable horizontal scroll if content overflows */
   padding: 0 1rem;
 `;
 
@@ -126,71 +132,69 @@ S.Li = styled.li`
   gap: 1rem;
 
   .runner {
-    flex: 3;
-    text-align: left;
+    flex: 1; /* Take up remaining space */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Truncate text */
+    white-space: nowrap; /* Prevent line breaks */
   }
 
-  .back {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: right;
-  }
-
-  .order {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .order-heading {
-    flex: 1;
-    width: 5 rem;
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-  }
-
-  .col {
+  .numbers {
     flex: none;
     width: 5rem;
     text-align: right;
+    display: flex;
+    flex-direction: column;
   }
 `;
 
-function OrderSelection({ orderSelection, payoutSelection, runner }) {
-  const unmatched = {
-    size: round(orderSelection?.size - orderSelection?.matched),
-    price: orderSelection?.price,
-    total: round((orderSelection?.size - orderSelection?.matched) * orderSelection?.price),
-  };
+function OrderSelection({ selection, runner = null }) {
+  let model;
+  if (runner) {
+    /* matched model needed */
+    model = {
+      size: round(selection.payout / selection.price),
+      price: selection.price,
+      total: round(selection.payout),
+      priceColour: redOrGreen(runner.back[0].price - selection.price),
+    };
+  } else {
+    /* unmatched model needed */
 
-  const matched = {
-    size: round(payoutSelection.payout / payoutSelection.price),
-    price: payoutSelection.price,
-    total: round(payoutSelection.payout),
-    priceColour: redOrGreen(runner.back[0].price - payoutSelection.price),
-  };
+    model = {
+      size: round(selection?.size - selection?.matched),
+      price: selection?.price,
+      total: round((selection?.size - selection?.matched) * selection?.price),
+    };
+  }
 
-  format(unmatched);
-  format(matched);
+  format(model);
   return (
     <div className="order">
       <S.Row>
-        <S.Col>{unmatched.price}</S.Col>
-        <S.Col style={matched.priceColour}>{matched.price}</S.Col>
+        <S.Col style={model.priceColour}>{model.price}</S.Col>
       </S.Row>
       <S.Row>
-        <S.Col>{unmatched.size}</S.Col>
-        <S.Col>{matched.size}</S.Col>
+        <S.Col>{model.size}</S.Col>
       </S.Row>
       <S.Row>
-        <S.Col>{unmatched.total}</S.Col>
-        <S.Col>{matched.total}</S.Col>
+        <S.Col>{model.total}</S.Col>
       </S.Row>
     </div>
   );
 }
+
+S.Row = styled.div`
+  flex: none;
+  width: 5rem;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+`;
+
+S.Col = styled.div`
+  /* flex: none;
+  text-align: right; */
+`;
 
 function round(value) {
   return value.toFixed(2).toLocaleString('en-US', {
@@ -219,18 +223,6 @@ function format(s) {
 function redOrGreen(value) {
   return { color: `${value >= 0 ? 'lightgreen' : 'red'}` };
 }
-
-S.Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-`;
-
-S.Col = styled.div`
-  flex: none;
-  width: 5rem;
-  text-align: right;
-`;
 
 function findCurrentOrder(orders) {
   const result = orders?.reduce(
