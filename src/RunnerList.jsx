@@ -165,7 +165,7 @@ function OrderSelection({ selection, runner = null }) {
 
     let price;
     if (selection?.size) {
-      price = round(selection?.price);
+      price = roundPrice(selection?.price);
     } else {
       price = 'BSP';
     }
@@ -245,4 +245,12 @@ function findCurrentOrder(orders) {
     { order: null, orderPlaceTime: 0 }
   );
   return result?.order;
+}
+
+export function roundPrice(value, places = 2) {
+  if (value === undefined || value === null) {
+    return null;
+  }
+  const p = 10 ** places;
+  return Math.round(value * p) / p;
 }

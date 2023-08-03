@@ -47,7 +47,7 @@ function getRunnerName(market, selectionId) {
 function priceInfo(rc, type, index) {
   const rcType = rc[type];
   if (rcType && Object.keys(rcType).length > 0) {
-    const [price, size] = rcType[index];
+    const [price, size] = rcType?.[index] ?? [null, null];
     return {
       price,
       size,
@@ -93,7 +93,10 @@ function getInfo(batb, index, index2) {
 }
 
 export function formatDuration(elapsedTimeMs) {
-  const seconds = Math.floor(elapsedTimeMs / 1000);
+  const isNegative = elapsedTimeMs < 0;
+  const absoluteElapsedTimeMs = Math.abs(elapsedTimeMs);
+
+  const seconds = Math.floor(absoluteElapsedTimeMs / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
@@ -111,9 +114,11 @@ export function formatDuration(elapsedTimeMs) {
   if (seconds % 60 > 0) {
     formattedTime.push(`${seconds % 60}s`);
   }
-  if (elapsedTimeMs > 0 && formattedTime.length === 0) {
-    formattedTime.push(`${elapsedTimeMs % 1000}ms`);
+  if (absoluteElapsedTimeMs > 0 && formattedTime.length === 0) {
+    formattedTime.push(`${absoluteElapsedTimeMs % 1000}ms`);
   }
 
-  return formattedTime.join('');
+  const formattedDuration = formattedTime.join('');
+
+  return isNegative ? `-${formattedDuration}` : formattedDuration;
 }
