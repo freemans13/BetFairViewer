@@ -94,7 +94,8 @@ export default function RunnerList() {
                 <div>{current.size} </div>
                 <div>{current.total}</div>
               </div>
-              {orderSelection?.status === 'E' || order?.options.orderType === 'MARKET_ON_CLOSE' ? (
+              {orderSelection?.status === 'E' ||
+              (order?.options.orderType === 'MARKET_ON_CLOSE' && orderSelection?.matched) ? (
                 <OrderSelection selection={orderSelection} />
               ) : (
                 <div className="numbers" />
