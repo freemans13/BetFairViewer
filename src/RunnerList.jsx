@@ -163,9 +163,9 @@ function OrderSelection({ selection, runner = null }) {
 
     let price;
     if (selection?.size) {
-      price = 'BSP';
-    } else {
       price = round(selection?.price);
+    } else {
+      price = 'BSP';
     }
     model = {
       size: round(selection?.size - selection?.matched),
