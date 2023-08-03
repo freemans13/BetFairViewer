@@ -34,7 +34,7 @@ export default function RunnerList() {
   } else {
     detail = model.age;
   }
-  let order = book?.orders[book.orders.length - 1];
+  let order = book?.orders?.[book.orders.length - 1];
 
   return (
     <S.Div>
@@ -68,9 +68,9 @@ export default function RunnerList() {
           const payoutSelection = book?.payouts.payouts.find((r) => r.id === runner.id);
           const orderSelection = order?.selections.find((r) => r.selectionId === runner.id);
           const current = {
-            price: runner.back?.[0].price,
-            size: runner.back?.[0].size,
-            total: runner.back?.[0].tradedVolume,
+            price: runner.back?.[0]?.price,
+            size: runner.back?.[0]?.size,
+            total: runner.back?.[0]?.tradedVolume,
           };
           if (runner.status !== 'ACTIVE') {
             current.price = null;
@@ -155,7 +155,7 @@ function OrderSelection({ selection, runner = null }) {
       size: round(selection.payout / selection.price),
       price: selection.price,
       total: round(selection.payout),
-      priceColour: redOrGreen(runner.back[0].price - selection.price),
+      priceColour: redOrGreen(runner.back?.[0]?.price - selection.price),
     };
   } else {
     /* unmatched model needed */
