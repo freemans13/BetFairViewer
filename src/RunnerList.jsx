@@ -16,7 +16,11 @@ export default function RunnerList() {
 
   const { data: projection, isLoading, error } = useMarketProjection(market.marketId);
   const { data: book, isLoadingBook, errorBook } = useBook(market.marketId);
-  const { data: status, isLoadingRaceStatus, errorRaceStatus } = useRaceStatus(market.marketId);
+  const {
+    data: raceStatus = { status: '' },
+    isLoadingRaceStatus,
+    errorRaceStatus,
+  } = useRaceStatus(market.marketId);
   if (isLoading || isLoadingBook || isLoadingRaceStatus) {
     return <div>loading...</div>;
   }
@@ -43,7 +47,7 @@ export default function RunnerList() {
         {projection.marketDefinition.venue} {getRaceLocalTime(market.marketStartTime)}
       </h1>
       <div>
-        {projection.id} {projection.marketDefinition.status} {status} {detail}
+        {projection.id} {projection.marketDefinition.status} {raceStatus.status} {detail}
       </div>
       <S.UlRunner>
         <S.Li style={{ color: 'gray' }}>
