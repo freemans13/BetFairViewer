@@ -7,12 +7,12 @@ export default function ProfitLoss() {
 
   return (
     <>
-      <div>Today: £{profitLoss?.today.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
-      <div>Yesterday: £{profitLoss?.yesterday.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
-      <div>This week: £{profitLoss?.thisWeek.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
-      <div>Last week: £{profitLoss?.lastWeek.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
-      <div>This month: £{profitLoss?.thisMonth.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
-      <div>Last month: £{profitLoss?.lastMonth.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
+      <div>Today: £{profitLoss?.today?.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
+      <div>Yesterday: £{profitLoss?.yesterday?.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
+      <div>This week: £{profitLoss?.thisWeek?.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
+      <div>Last week: £{profitLoss?.lastWeek?.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
+      <div>This month: £{profitLoss?.thisMonth?.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
+      <div>Last month: £{profitLoss?.lastMonth?.clearedOrders[0]?.profit.toFixed(2) ?? 'none'}</div>
     </>
   );
 }
