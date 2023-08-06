@@ -105,7 +105,10 @@ export default function RunnerList() {
                 <div>{current.total}</div>
               </div>
               {isUnmatched || isMarketOnCloseOrder ? (
-                <OrderSelection selection={orderSelection} />
+                <OrderSelection
+                  selection={orderSelection}
+                  isMarketOnCloseOrder={isMarketOnCloseOrder}
+                />
               ) : (
                 <div className="numbers" />
               )}
@@ -155,7 +158,7 @@ S.Li = styled.li`
   }
 `;
 
-function OrderSelection({ selection, runner = null }) {
+function OrderSelection({ selection, runner = null, isMarketOnCloseOrder = false }) {
   let model;
   if (runner) {
     /* matched model needed */
@@ -169,10 +172,12 @@ function OrderSelection({ selection, runner = null }) {
     /* unmatched model needed */
 
     let price;
-    if (selection?.size) {
-      price = roundPrice(selection?.price);
-    } else {
+    if (!selection) {
+      price = null;
+    } else if (isMarketOnCloseOrder && !selection?.price) {
       price = 'BSP';
+    } else {
+      price = roundPrice(selection?.price);
     }
     model = {
       size: round(selection?.size - selection?.matched),
