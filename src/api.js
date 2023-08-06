@@ -39,4 +39,18 @@ function useBook(marketId) {
   return { data, isLoading, error };
 }
 
-export { useOverview, useProfitLoss, useMarketCatalogue, useMarketProjection, useBook };
+function useRaceStatus(marketId) {
+  const { data, isLoading, error } = useSWR(`/betfair/raceStatus/${marketId}`, fetcher, {
+    refreshInterval: 1000, // Poll every second (1000ms)
+  });
+  return { data, isLoading, error };
+}
+
+export {
+  useOverview,
+  useProfitLoss,
+  useMarketCatalogue,
+  useMarketProjection,
+  useBook,
+  useRaceStatus,
+};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMarketProjection, useBook } from './api';
+import { useMarketProjection, useBook, useRaceStatus } from './api';
 import Model from './Model';
 import { styled } from '@linaria/react';
 import { useLoaderData } from 'react-router-dom';
@@ -16,7 +16,8 @@ export default function RunnerList() {
 
   const { data: projection, isLoading, error } = useMarketProjection(market.marketId);
   const { data: book, isLoadingBook, errorBook } = useBook(market.marketId);
-  if (isLoading || isLoadingBook) {
+  const { data: status, isLoadingRaceStatus, errorRaceStatus } = useRaceStatus(market.marketId);
+  if (isLoading || isLoadingBook || isLoadingRaceStatus) {
     return <div>loading...</div>;
   }
   if (!projection) {
@@ -42,7 +43,7 @@ export default function RunnerList() {
         {projection.marketDefinition.venue} {getRaceLocalTime(market.marketStartTime)}
       </h1>
       <div>
-        {projection.id} {projection.marketDefinition.status} {detail}
+        {projection.id} {projection.marketDefinition.status} {status} {detail}
       </div>
       <S.UlRunner>
         <S.Li style={{ color: 'gray' }}>
