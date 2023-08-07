@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, createHashRouter, RouterProvider } from 'react-router-dom';
 import GlobalStyles from './GlobalStyles';
 import './index.css';
 import RunnerList from './RunnerList.jsx';
@@ -24,7 +24,7 @@ async function MarketLoader({ params }) {
   return { market };
 }
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <Overview />,
