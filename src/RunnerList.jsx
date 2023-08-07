@@ -86,9 +86,7 @@ export default function RunnerList() {
 
           const isUnmatched = orderSelection?.status === 'E';
           const isMarketOnCloseOrder =
-            orderSelection &&
-            order?.options?.orderType === 'MARKET_ON_CLOSE' &&
-            !orderSelection.matched;
+            orderSelection && order?.orderType === 'MARKET_ON_CLOSE' && !orderSelection.matched;
           return (
             <S.Li key={runner.id}>
               <div className="runner">
