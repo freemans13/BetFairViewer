@@ -86,7 +86,9 @@ export default function RunnerList() {
 
           const isUnmatched = orderSelection?.status === 'E';
           const isMarketOnCloseOrder =
-            orderSelection && order?.orderType === 'MARKET_ON_CLOSE' && !orderSelection.matched;
+            orderSelection &&
+            order?.persistenceType === 'MARKET_ON_CLOSE' &&
+            !orderSelection?.matched;
           return (
             <S.Li key={runner.id}>
               <div className="runner">
@@ -172,7 +174,10 @@ function OrderSelection({ selection, runner = null, isMarketOnCloseOrder = false
     let price;
     if (!selection) {
       price = null;
-    } else if (isMarketOnCloseOrder && !selection?.price) {
+    } else if (
+      isMarketOnCloseOrder &&
+      (!selection?.size || !selection?.matched || selection.size !== selection.matched)
+    ) {
       price = 'BSP';
     } else {
       price = roundPrice(selection?.price);
