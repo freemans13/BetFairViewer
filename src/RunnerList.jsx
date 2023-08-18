@@ -95,11 +95,12 @@ export default function RunnerList() {
                 {runner.runnerName}
 
                 <div style={{ color: 'grey' }}>{runner.id}</div>
-                <div style={redOrGreen(payoutSelection?.profit)}>
-                  {runner.status === 'ACTIVE'
-                    ? payoutSelection?.profit
-                    : `(${runner.status.toLowerCase()})`}
-                </div>
+
+                {runner.status === 'ACTIVE' ? (
+                  <div style={redOrGreen(payoutSelection?.profit)}>{payoutSelection?.profit}</div>
+                ) : (
+                  <div>`(${runner.status.toLowerCase()})`</div>
+                )}
               </div>
               <div className="numbers">
                 <div>{current.price}</div>
