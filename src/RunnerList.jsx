@@ -180,7 +180,7 @@ function OrderSelection({ selection, runner = null, isMarketOnCloseOrder = false
       if (!selection?.price) {
         price = `BSP`;
       } else {
-        price = `${roundPrice(selection?.price)} (BSP)`;
+        price = `BSP ${roundPrice(selection?.price)}`;
       }
     } else {
       price = roundPrice(selection?.price);
