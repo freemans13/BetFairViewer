@@ -92,11 +92,13 @@ export default function RunnerList() {
           return (
             <S.Li key={runner.id}>
               <div className="runner">
-                {runner.runnerName}{' '}
-                {runner.status === 'ACTIVE' ? '' : `(${runner.status.toLowerCase()})`}
+                {runner.runnerName}
+
                 <div style={{ color: 'grey' }}>{runner.id}</div>
                 <div style={redOrGreen(payoutSelection?.profit)}>
-                  {runner.status === 'ACTIVE' ? payoutSelection?.profit : null}
+                  {runner.status === 'ACTIVE'
+                    ? payoutSelection?.profit
+                    : `(${runner.status.toLowerCase()})`}
                 </div>
               </div>
               <div className="numbers">
@@ -174,11 +176,12 @@ function OrderSelection({ selection, runner = null, isMarketOnCloseOrder = false
     let price;
     if (!selection) {
       price = null;
-    } else if (
-      isMarketOnCloseOrder &&
-      (!selection?.size || !selection?.matched || selection.size !== selection.matched)
-    ) {
-      price = 'BSP';
+    } else if (isMarketOnCloseOrder && !selection?.matched) {
+      if (!selection?.price) {
+        price = `BSP`;
+      } else {
+        price = `${roundPrice(selection?.price)} (BSP)`;
+      }
     } else {
       price = roundPrice(selection?.price);
     }
