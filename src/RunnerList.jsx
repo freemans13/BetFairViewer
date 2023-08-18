@@ -99,7 +99,7 @@ export default function RunnerList() {
                 {runner.status === 'ACTIVE' ? (
                   <div style={redOrGreen(payoutSelection?.profit)}>{payoutSelection?.profit}</div>
                 ) : (
-                  <div>`(${runner.status.toLowerCase()})`</div>
+                  <div>`({runner.status.toLowerCase()})`</div>
                 )}
               </div>
               <div className="numbers">
