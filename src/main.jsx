@@ -7,8 +7,9 @@ import RunnerList from './RunnerList.jsx';
 import Overview from './OvervIew.jsx';
 import ProfitLoss from './ProfitLoss.jsx';
 
-async function OverviewLoader() {
-  const markets = await fetch('/betfair/Overview').then((r) => r.json());
+async function OverviewLoader({ params }) {
+  const period = params.period ?? 'today';
+  const markets = await fetch(`/betfair/Overview/${period}`).then((r) => r.json());
   return { markets };
 }
 async function MarketCatalogueLoader({ params }) {
@@ -27,6 +28,11 @@ async function MarketLoader({ params }) {
 const router = createHashRouter([
   {
     path: '/',
+    element: <Overview />,
+    loader: OverviewLoader,
+  },
+  {
+    path: '/:period',
     element: <Overview />,
     loader: OverviewLoader,
   },

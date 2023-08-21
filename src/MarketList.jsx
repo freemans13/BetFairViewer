@@ -5,12 +5,13 @@ import { getRaceLocalTime } from './date-utils.js';
 
 const S = {}; // styled components
 
-export default function MarketList({ markets, title }) {
+export default function MarketList({ markets, period }) {
   if (!markets || markets.length === 0) {
     return null;
   }
 
   let totalGreenUpValue = 0;
+  let greenUpCount = 0;
   const m =
     markets &&
     markets.map((market) => {
@@ -18,13 +19,17 @@ export default function MarketList({ markets, title }) {
       const matched = market.greenUp.matchedSelectionCount;
       const total = market.greenUp.selectionCount;
       totalGreenUpValue += greenUpValue;
+      if (greenUpValue) {
+        greenUpCount++;
+      }
       return { market, greenUpValue, matched, total };
     });
   const filteredMarkets = m && m.filter((market) => market.total !== 0);
   return (
     <S.Div>
       <div>
-        {title}, {filteredMarkets && filteredMarkets.length} markets,{' '}
+        {filteredMarkets && filteredMarkets.length} markets, {greenUpCount}
+        {' with matches, '}
         <b style={redOrGreen(totalGreenUpValue)}>£{totalGreenUpValue?.toFixed(2)}</b>
       </div>
       {filteredMarkets &&

@@ -14,7 +14,9 @@ export default class makeModel {
       const info = getRunnerPriceInfo(projection.rc, runner.id);
       this.runners.push({
         ...runner,
-        runnerName: getRunnerName(market, runner.id),
+        runnerName: runner.runnerName,
+        status: runner.status,
+        bsp: runner.bsp,
         back: [priceInfo(info, 'batb', 0), priceInfo(info, 'batb', 1), priceInfo(info, 'batb', 2)],
         tradedVolume: info?.tv,
         lastTradedPrice: info?.ltp,
@@ -37,11 +39,6 @@ function getRunnerPriceInfo(rc, selectionId) {
   }
   const runner = rc.filter((runner) => runner.id === selectionId);
   return runner[0] || {};
-}
-
-function getRunnerName(market, selectionId) {
-  const runner = market.runners.filter((runner) => runner.selectionId === selectionId);
-  return runner[0].runnerName;
 }
 
 function priceInfo(rc, type, index) {

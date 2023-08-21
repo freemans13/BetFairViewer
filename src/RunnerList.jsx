@@ -73,8 +73,8 @@ export default function RunnerList() {
           const payoutSelection = book?.payouts.payouts.find((r) => r.id === runner.id);
           const orderSelection = order?.selections.find((r) => r.selectionId === runner.id);
           const current = {
-            price: runner.back?.[0]?.price,
-            size: runner.back?.[0]?.size,
+            price: runner.bsp ?? runner.back?.[0]?.price,
+            size: runner.status === 'WINNER' ? 'WINNER' : runner.back?.[0]?.size,
             total: runner.back?.[0]?.tradedVolume,
           };
           if (runner.status !== 'ACTIVE') {
