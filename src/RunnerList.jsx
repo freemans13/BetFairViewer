@@ -73,16 +73,19 @@ export default function RunnerList() {
           const payoutSelection = book?.payouts.payouts.find((r) => r.id === runner.id);
           const orderSelection = order?.selections.find((r) => r.selectionId === runner.id);
           const current = {
-            price: runner.bsp ?? runner.back?.[0]?.price,
-            size: runner.status === 'WINNER' ? 'WINNER' : runner.back?.[0]?.size,
+            price: round(runner.bsp) ?? runner.back?.[0]?.price,
+            size: runner.back?.[0]?.size,
             total: runner.back?.[0]?.tradedVolume,
           };
-          if (runner.status !== 'ACTIVE') {
+          if (runner.status == 'REMOVED') {
             current.price = null;
             current.size = null;
             current.total = null;
           }
           format(current);
+          if (runner.status === 'WINNER') {
+            current.size = 'winner';
+          }
 
           const isUnmatched = orderSelection?.status === 'E';
           const isMarketOnCloseOrder =
@@ -96,7 +99,7 @@ export default function RunnerList() {
 
                 <div style={{ color: 'grey' }}>{runner.id}</div>
 
-                {runner.status === 'ACTIVE' ? (
+                {runner.status !== 'REMOVED' ? (
                   <div style={redOrGreen(payoutSelection?.profit)}>{payoutSelection?.profit}</div>
                 ) : (
                   <div>({runner.status.toLowerCase()})</div>
