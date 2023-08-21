@@ -102,7 +102,7 @@ export default function RunnerList() {
                 {runner.status !== 'REMOVED' ? (
                   <div style={redOrGreen(payoutSelection?.profit)}>{payoutSelection?.profit}</div>
                 ) : (
-                  <div>({runner.status.toLowerCase()})</div>
+                  <div style={{ color: 'grey' }}>{runner.status.toLowerCase()}</div>
                 )}
               </div>
               <div className="numbers">
