@@ -10,18 +10,12 @@ import ProfitLoss from './ProfitLoss.jsx';
 async function OverviewLoader({ params }) {
   const period = params.period ?? 'today';
   const markets = await fetch(`/betfair/Overview/${period}`).then((r) => r.json());
-  return { markets };
+  return { period, markets };
 }
 async function MarketCatalogueLoader({ params }) {
   const marketId = `1.${params.marketId}`;
-  const markets = await fetch(`/betfair/MarketCatalogue`).then((r) => r.json());
+  const markets = await fetch(`/betfair/MarketCatalogue/${marketId}`).then((r) => r.json());
   const market = markets.find((m) => m.marketId === marketId);
-  return { market };
-}
-
-async function MarketLoader({ params }) {
-  const marketId = `1.${params.marketId}`;
-  const market = await fetch(`/betfair/market/${marketId}`).then((r) => r.json());
   return { market };
 }
 
@@ -32,7 +26,7 @@ const router = createHashRouter([
     loader: OverviewLoader,
   },
   {
-    path: '/:period',
+    path: '/overview/:period',
     element: <Overview />,
     loader: OverviewLoader,
   },

@@ -2,17 +2,18 @@ import React from 'react';
 
 import { useOverview, useProfitLoss } from './api.js';
 import MarketList from './MarketList.jsx';
-import { Link } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 
 export default function Overview() {
-  const [period, setPeriod] = React.useState('today');
-  const { data: overview } = useOverview(period);
+  const navigate = useNavigate();
+  // @ts-ignore
+  const { period = 'today', markets: overview } = useLoaderData();
   const { data: profitLoss } = useProfitLoss();
   if (!overview) return <div>Loading overview...</div>;
   if (!profitLoss) return <div>Loading profit/loss...</div>;
 
   function handleDateChange(event) {
-    setPeriod(event.target.value);
+    navigate(`/overview/${event.target.value}`);
   }
 
   return (
