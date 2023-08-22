@@ -9,8 +9,7 @@ import ProfitLoss from './ProfitLoss.jsx';
 
 async function OverviewLoader({ params }) {
   const period = params.period ?? 'today';
-  const markets = await fetch(`/betfair/Overview/${period}`).then((r) => r.json());
-  return { period, markets };
+  return { period };
 }
 async function MarketCatalogueLoader({ params }) {
   const marketId = `1.${params.marketId}`;

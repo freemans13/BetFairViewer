@@ -7,7 +7,8 @@ import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 export default function Overview() {
   const navigate = useNavigate();
   // @ts-ignore
-  const { period = 'today', markets: overview } = useLoaderData();
+  const { period = 'today' } = useLoaderData();
+  const { data: overview } = useOverview(period);
   const { data: profitLoss } = useProfitLoss();
   if (!overview) return <div>Loading overview...</div>;
   if (!profitLoss) return <div>Loading profit/loss...</div>;
