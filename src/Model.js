@@ -34,11 +34,11 @@ export default class makeModel {
 }
 
 function getRunnerPriceInfo(rc, selectionId) {
-  if (!rc || rc.length === 0) {
+  if (!rc || Object.values(rc).length === 0) {
     return {};
   }
-  const runner = rc.filter((runner) => runner.id === selectionId);
-  return runner[0] || {};
+  const runner = rc[selectionId];
+  return runner || {};
 }
 
 function getRunnerName(market, selectionId) {
