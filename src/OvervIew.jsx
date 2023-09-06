@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useOverview, useProfitLoss } from './api.js';
+import { usePeriods, useOverview, useProfitLoss } from './api.js';
 import MarketList from './MarketList.jsx';
 import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ export default function Overview() {
   const navigate = useNavigate();
   // @ts-ignore
   const { period = 'today' } = useLoaderData();
+  const { data: periods } = usePeriods();
   const { data: overview } = useOverview(period);
   const { data: profitLoss } = useProfitLoss();
   if (!overview) return <div>Loading overview...</div>;
@@ -26,10 +27,11 @@ export default function Overview() {
           onChange={handleDateChange}
           value={period}
         >
-          <option value="thisWeek">The week</option>
-          <option value="yesterday">Yesterday</option>
-          <option value="today">Today</option>
-          <option value="tomorrow">Tomorrow</option>
+          {periods?.map(({ key: p, name }) => (
+            <option key={p} value={p}>
+              {name}
+            </option>
+          ))}
         </select>{' '}
         <Link to="/profit">
           £{profitLoss?.today?.clearedOrders?.[0]?.profit?.toFixed(2) ?? '0.00'}

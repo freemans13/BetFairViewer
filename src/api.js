@@ -4,6 +4,11 @@ import useSWR from 'swr';
 // @ts-ignore
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
+function usePeriods() {
+  const response = useSWR(`/betfair/periods`, fetcher);
+  return response;
+}
+
 function useOverview(period) {
   const response = useSWR(`/betfair/Overview/${period}`, fetcher, {
     refreshInterval: 5_000, // Poll every few seconds
@@ -47,6 +52,7 @@ function useRaceStatus(marketId) {
 }
 
 export {
+  usePeriods,
   useOverview,
   useProfitLoss,
   useMarketCatalogue,
