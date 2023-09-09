@@ -18,11 +18,12 @@ export default function MarketList({ markets, period }) {
       const greenUpValue = market.greenUp.profit;
       const matched = market.greenUp.matchedSelectionCount;
       const total = market.greenUp.selectionCount;
+      const margin = market.greenUp.margin;
       totalGreenUpValue += greenUpValue;
       if (greenUpValue) {
         greenUpCount++;
       }
-      return { market, greenUpValue, matched, total };
+      return { market, greenUpValue, matched, margin, total };
     });
   const filteredMarkets = m && m.filter((market) => market.total !== 0);
   return (
@@ -33,7 +34,7 @@ export default function MarketList({ markets, period }) {
         <b style={redOrGreen(totalGreenUpValue)}>£{totalGreenUpValue?.toFixed(2)}</b>
       </div>
       {filteredMarkets &&
-        filteredMarkets.map(({ market, greenUpValue, matched, total }) => {
+        filteredMarkets.map(({ market, greenUpValue, matched, margin, total }) => {
           const startTime = new Date(market.marketStartTime);
           const old = startTime < new Date();
           const style = old ? { color: 'gray' } : {};
@@ -46,7 +47,8 @@ export default function MarketList({ markets, period }) {
               {market.event.venue} {getRaceLocalTime(market.marketStartTime)}
               <br />
               {matched}/{total}{' '}
-              <span style={redOrGreen(greenUpValue)}>£{greenUpValue?.toFixed(2)}</span>
+              <span style={redOrGreen(greenUpValue)}>£{greenUpValue?.toFixed(2)}</span>{' '}
+              {margin ? `${margin.toFixed(0)}%` : ''}{' '}
             </S.Link>
           );
         })}
