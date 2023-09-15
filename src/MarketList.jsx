@@ -35,8 +35,7 @@ export default function MarketList({ markets, period }) {
       </div>
       {filteredMarkets &&
         filteredMarkets.map(({ market, greenUpValue, matched, margin, total }) => {
-          const startTime = new Date(market.marketStartTime);
-          const old = startTime < new Date();
+          const old = market.status === 'CLOSED';
           const style = old ? { color: 'gray' } : {};
           return (
             <S.Link
